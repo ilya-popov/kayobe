@@ -7,7 +7,8 @@ ip_allocation_hostname:
 
 # List of IP allocations. Each item should be a dict with the following items:
 # net_name: Name of the network
-# cidr: CIDR representation of the IP subnet
+# cidr: CIDR representation of the default IP subnet
+# segments: List of CIDRs of all IP subnets in the network
 # allocation_pool_start: First IP address in the allocation pool (optional)
 # allocation_pool_end: Last IP address in the allocation pool (optional)
 ip_allocations:

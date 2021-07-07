@@ -28,7 +28,13 @@ options:
     required: True
     type: string
   - option-name: cidr
-    description: IP Network in CIDR format
+    description: Default IP Network in CIDR format
+    required: True
+    type: string
+  - option-name: segments
+    description: >
+      List of IP Network segments in CIDR format. It should contain at least
+      the Default IP Network used in the cidr option.
     required: True
     type: string
   - option-name: allocation_pool_start
@@ -56,6 +62,7 @@ EXAMPLES = """
     net_name: my-network
     hostname: my-host
     cidr: 10.0.0.0/24
+    segments: [10.0.0.0/24]
     allocation_pool_start: 10.0.0.1
     allocation_pool_end: 10.0.0.254
     allocation_file: /path/to/allocation/file.yml
@@ -124,16 +131,18 @@ def update_allocation(module, allocations):
     net_name = module.params['net_name']
     hostname = module.params['hostname']
     cidr = module.params['cidr']
+    cidrs = module.params['segments']
     allocation_pool_start = module.params['allocation_pool_start']
     allocation_pool_end = module.params['allocation_pool_end']
     network = netaddr.IPNetwork(cidr)
+    segments = netaddr.IPSet(cidrs)
     result = {
         'changed': False,
     }
     object_name = "%s_ips" % net_name
     net_allocations = allocations.setdefault(object_name, {})
     invalid_allocations = {hn: ip for hn, ip in net_allocations.items()
-                           if netaddr.IPAddress(ip) not in network}
+                           if netaddr.IPAddress(ip) not in segments}
     if invalid_allocations:
         module.fail_json(msg="Found invalid existing allocations in network %s: %s" %
             (network,
@@ -177,6 +186,7 @@ def main():
             net_name=dict(required=True, type='str'),
             hostname=dict(required=True, type='str'),
             cidr=dict(required=True, type='str'),
+            segments=dict(required=True, type='list'),
             allocation_pool_start=dict(required=False, type='str'),
             allocation_pool_end=dict(required=False, type='str'),
             allocation_file=dict(required=True, type='str'),

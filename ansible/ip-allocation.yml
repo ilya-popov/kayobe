@@ -19,6 +19,7 @@
             [{
               'net_name': item,
               'cidr': item|net_cidr,
+              'segments': hostvars|map('extract', hostvars, (item|string) + '_cidr')|select|list|unique,
               'allocation_pool_start': item|net_allocation_pool_start,
               'allocation_pool_end': item|net_allocation_pool_end
             }]
