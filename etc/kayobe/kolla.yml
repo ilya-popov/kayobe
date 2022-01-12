@@ -232,6 +232,12 @@
 # Whether TLS is enabled for the internal API endpoints. Default is 'no'.
 #kolla_enable_tls_internal:
 
+# Whether TLS is enabled for the backend services. Default is 'no'.
+#kolla_enable_tls_backend:
+
+# Whether TLS connection is verified in the HAProxy. Default is 'yes'.
+#kolla_verify_tls_backend:
+
 # Whether debug logging is enabled. Default is 'false'.
 #kolla_openstack_logging_debug:
 
@@ -463,11 +469,6 @@
 # the deprecated name kolla_tls_cert will be removed in a future release.
 #kolla_external_tls_cert:
 
-# Path to a CA certificate file to use for the OS_CACERT environment variable
-# in public-openrc.sh file when TLS is enabled, instead of Kolla-Ansible's
-# default.
-#kolla_external_fqdn_cacert:
-
 # Internal API certificate bundle.
 #
 # When kolla_enable_tls_internal is true, this should contain an X.509
@@ -477,9 +478,12 @@
 #kolla_internal_tls_cert:
 
 # Path to a CA certificate file to use for the OS_CACERT environment variable
-# in admin-openrc.sh file when TLS is enabled, instead of Kolla-Ansible's
-# default.
-#kolla_internal_fqdn_cacert:
+# in the both admin-openrc.sh and public-openrc.sh files when TLS is enabled,
+# instead of Kolla-Ansible's default.
+#kolla_admin_openrc_cacert:
+
+# Whether CA files should be copied into service containers. Default is 'no'.
+#kolla_copy_ca_into_containers:
 
 ###############################################################################
 # Dummy variable to allow Ansible to accept this file.

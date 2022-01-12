@@ -479,6 +479,12 @@ kolla_enable_tls_external: "{{ kolla_enable_tls_internal if public_net_name == i
 # Whether TLS is enabled for the internal API endpoints.
 kolla_enable_tls_internal: "no"
 
+# Whether TLS is enabled for the backend services.
+kolla_enable_tls_backend: "no"
+
+# Whether TLS connection is verified in the HAProxy.
+kolla_verify_tls_backend: "yes"
+
 # Whether debug logging is enabled.
 kolla_openstack_logging_debug: "False"
 
@@ -636,11 +642,6 @@ kolla_external_fqdn: "{{ public_net_name | net_fqdn or kolla_external_vip_addres
 # Ussuri cycle.
 kolla_external_tls_cert: "{{ kolla_tls_cert | default }}"
 
-# Path to a CA certificate file to use for the OS_CACERT environment variable
-# in public-openrc.sh file when TLS is enabled, instead of Kolla-Ansible's
-# default.
-kolla_external_fqdn_cacert:
-
 # Internal API certificate bundle.
 #
 # When kolla_enable_tls_internal is true, this should contain an X.509
@@ -649,7 +650,11 @@ kolla_external_fqdn_cacert:
 # Note that this should be formatted as a literal style block scalar.
 kolla_internal_tls_cert:
 
+# Whether CA files should be copied into service containers, to the seed and
+# controller hosts.
+kolla_copy_ca_into_containers: "no"
+
 # Path to a CA certificate file to use for the OS_CACERT environment variable
-# in admin-openrc.sh file when TLS is enabled, instead of Kolla-Ansible's
-# default.
-kolla_internal_fqdn_cacert:
+# in the both admin-openrc.sh and public-openrc.sh files when TLS is enabled,
+# instead of Kolla-Ansible's default.
+kolla_admin_openrc_cacert:

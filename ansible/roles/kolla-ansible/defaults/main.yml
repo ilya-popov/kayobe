@@ -156,10 +156,12 @@ kolla_neutron_ml2_tenant_network_types: []
 kolla_ansible_certificates_path:
 kolla_enable_tls_external:
 kolla_enable_tls_internal:
+kolla_enable_tls_backend:
+kolla_verify_tls_backend:
 kolla_external_fqdn_cert:
 kolla_internal_fqdn_cert:
-kolla_external_fqdn_cacert:
-kolla_internal_fqdn_cacert:
+kolla_copy_ca_into_containers:
+kolla_admin_openrc_cacert:
 
 #############################
 # Ironic options

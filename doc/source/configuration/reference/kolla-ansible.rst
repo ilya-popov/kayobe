@@ -260,6 +260,22 @@ API.
 TLS Encryption of APIs
 ----------------------
 
+``kolla_admin_openrc_cacert``
+    Path to a CA certificate file to use for the ``OS_CACERT`` environment
+    variable in openrc files when TLS is enabled, instead of Kolla Ansible's
+    default.
+``kolla_copy_ca_into_containers``
+    Whether CA files should be copied into service containers. Default is ``no``.
+    This is required for any certificates that are either self-signed or signed
+    by a private CA, and are not already present in the service image trust
+    store. Otherwise, either CA validation will need to be explicitly disabled
+    or the path to the CA certificate must be configured in the service using
+    the ``openstack_cacert`` parameter. Kolla will install these certificates
+    in the container system wide trust store when the container starts. Also
+    these certificates installed in the seed and overcloud hosts trust store
+    because some connections made from them to the secured services when this
+    option is enabled.
+
 The following variables affect TLS encryption of the public API.
 
 ``kolla_enable_tls_external``
@@ -268,13 +284,8 @@ The following variables affect TLS encryption of the public API.
     A TLS certificate bundle to use for the public API endpoints, if
     ``kolla_enable_tls_external`` is ``true``.  Note that this should be
     formatted as a literal style block scalar.
-``kolla_external_fqdn_cacert``
-    Path to a CA certificate file to use for the ``OS_CACERT`` environment
-    variable in openrc files when TLS is enabled, instead of Kolla Ansible's
-    default.
 
-The following variables affect TLS encryption of the internal API. Currently
-this requires all Kolla images to be built with the API's root CA trusted.
+The following variables affect TLS encryption of the internal API.
 
 ``kolla_enable_tls_internal``
     Whether TLS is enabled for the internal API endpoints. Default is ``no``.
@@ -282,10 +293,14 @@ this requires all Kolla images to be built with the API's root CA trusted.
     A TLS certificate bundle to use for the internal API endpoints, if
     ``kolla_enable_tls_internal`` is ``true``.  Note that this should be
     formatted as a literal style block scalar.
-``kolla_internal_fqdn_cacert``
-    Path to a CA certificate file to use for the ``OS_CACERT`` environment
-    variable in openrc files when TLS is enabled, instead of Kolla Ansible's
-    default.
+
+The following variables affects TLS encryption of the backend services.
+
+``kolla_enable_tls_backend``
+    Whether TLS is enabled for the backend services. Default is ``no``.
+``kolla_verify_tls_backend``
+    Whether TLS connection is verified in the HAProxy. Default is ``yes`` when
+    the ``kolla_enable_tls_backend`` enabled.
 
 Example: enabling TLS for the public API
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -302,7 +317,7 @@ Here is an example:
      -----BEGIN CERTIFICATE-----
      ...
      -----END CERTIFICATE-----
-   kolla_external_fqdn_cacert: /path/to/ca/certificate/bundle
+   kolla_admin_openrc_cacert: /path/to/ca/certificate/bundle
 
 Example: enabling TLS for the internal API
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -319,7 +334,7 @@ Here is an example:
      -----BEGIN CERTIFICATE-----
      ...
      -----END CERTIFICATE-----
-   kolla_internal_fqdn_cacert: /path/to/ca/certificate/bundle
+   kolla_admin_openrc_cacert: /path/to/ca/certificate/bundle
 
 Other certificates
 ------------------
@@ -342,7 +357,9 @@ Example: adding a trusted custom CA certificate to containers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In an environment with a private CA, it may be necessary to add the root CA
-certificate to the trust store of containers.
+certificate to the trust store of containers. The variable
+``kolla_copy_ca_into_containers`` set to ``yes`` should be used to add these
+certificate files into each Kolla container.
 
 .. code-block:: console
    :caption: ``$KAYOBE_CONFIG_PATH``
@@ -358,7 +375,8 @@ Example: adding certificates for backend TLS
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Kolla Ansible backend TLS can be used to provide end-to-end encryption of API
-traffic.
+traffic. The variable ``kolla_enable_tls_backend`` set to ``yes`` handle these
+files for each backend service.
 
 .. code-block:: console
    :caption: ``$KAYOBE_CONFIG_PATH``
@@ -368,9 +386,8 @@ traffic.
        backend-cert.pem
        backend-key.pem
 
-See the :kolla-ansible-doc:`Kolla Ansible documentation
-<admin/advanced-configuration.html#tls-configuration>` for how to provide
-service and/or host-specific certificates and keys.
+See the :kolla-ansible-doc:`Kolla Ansible documentation<admin/tls.html>` for
+how to provide service and/or host-specific certificates and keys.
 
 Custom Global Variables
 -----------------------

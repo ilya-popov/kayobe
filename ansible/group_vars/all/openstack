@@ -28,7 +28,8 @@ openstack_auth:
   auth_url: "{{ lookup('env', 'OS_AUTH_URL') }}"
 
 # Overcloud CA certificate path.
-openstack_cacert: "{{ lookup('env', 'OS_CACERT') }}"
+openstack_cacert_default: "/etc/{{ 'ssl/certs/ca-certificates.crt' if kolla_base_distro in ['debian', 'ubuntu'] else 'pki/tls/certs/ca-bundle.crt' }}"
+openstack_cacert: "{{ lookup('env', 'OS_CACERT') | default(openstack_cacert_default, true) }}"
 
 # Overcloud interface (public, internal, admin).
 openstack_interface: internal
@@ -45,7 +46,7 @@ openstack_auth_env:
   OS_AUTH_URL: "{{ lookup('env', 'OS_AUTH_URL') }}"
   OS_INTERFACE: "{{ lookup('env', 'OS_INTERFACE') }}"
   OS_IDENTITY_API_VERSION: "{{ lookup('env', 'OS_IDENTITY_API_VERSION') }}"
-  OS_CACERT: "{{ lookup('env', 'OS_CACERT') }}"
+  OS_CACERT: "{{ lookup('env', 'OS_CACERT') | default(openstack_cacert_default, true) }}"
 
 # List of parameters required in openstack_auth when openstack_auth_type is
 # password.

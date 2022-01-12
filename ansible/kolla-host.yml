@@ -22,3 +22,37 @@
         # with this error message.
         - '"Could not find the requested service" not in result.msg'
       when: kolla_enable_ironic | bool
+
+- name: Update seed and controllers CA certificates
+  hosts: seed:controllers
+  tags:
+    - kolla-ansible
+    - kolla-host
+  become: true
+  tasks:
+    - name: Ensure source CA certificates directory exist
+      stat:
+        path: "{{ kayobe_config_path }}/kolla/certificates/ca/"
+      delegate_to: localhost
+      run_once: true
+      register: ca_directory
+
+    - block:
+
+        - name: Ensure remote CA certificates exist
+          copy:
+            src: "{{ kayobe_config_path }}/kolla/certificates/ca/"
+            dest: "{{ '/etc/pki/ca-trust/source/anchors/' if ansible_os_family == 'RedHat' else '/usr/local/share/ca-certificates/' }}"
+            mode: "0644"
+          register: copy_result
+          when:
+            - kolla_copy_ca_into_containers | bool
+
+        - name: Update CA certificates bundle
+          command: "{{ 'update-ca-trust' if ansible_os_family == 'RedHat' else 'update-ca-certificates' }}"
+          failed_when: false
+          when:
+            - kolla_copy_ca_into_containers | bool
+            - copy_result is changed
+
+      when: ca_directory.stat.isdir is defined and ca_directory.stat.isdir
