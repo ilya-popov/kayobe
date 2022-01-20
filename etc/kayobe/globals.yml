@@ -65,6 +65,9 @@
 # to not specify a gather subset.
 #kayobe_ansible_setup_gather_subset:
 
+# Whether disk partitions managed by the LVM role.
+#kayobe_lvm_manage_disks:
+
 ###############################################################################
 # Dummy variable to allow Ansible to accept this file.
 workaround_ansible_issue_8743: yes

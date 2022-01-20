@@ -26,6 +26,7 @@
     - name: Ensure LVM configuration is applied
       vars:
         manage_lvm: True
+        manage_disks: "{{ kayobe_lvm_manage_disks | default(omit, true) }}"
       include_role:
         name: mrlesmithjr.manage-lvm
         apply:

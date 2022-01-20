@@ -21,7 +21,7 @@ roles:
     version: v0.1.4
   - name: mrlesmithjr.manage-lvm
     src: git+http://172.17.0.1:3143/ansible-manage-lvm.git
-    version: v0.2.6
+    version: v0.2.6.1
   - name: mrlesmithjr.mdadm
     src: git+http://172.17.0.1:3143/ansible-mdadm.git
     version: v0.1.1
