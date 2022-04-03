@@ -1,0 +1,25 @@
+---
+issues:
+  - |
+    By default ``admin_oc_net_name`` is the same as ``provision_oc_net_name``
+    network used to provision bare metal overcloud hosts. But in production
+    environments, there is a good idea to separate these networks using VLANs.
+    Doing this is simply realized in the Kayobe, but leads to unpredictable
+    results depending on Linux OS used. On the RedHat family with
+    network-scripts (CentOS Linux for example), we have the orphan
+    ifcfg-interface.vlanid file in the network-scripts directory which creates
+    the duplicate route after the first reboot of the host. On the Debian
+    family with systemd-networkd (Ubuntu Linux for example), we already have
+    the orphan interface with a duplicate route right after `host configure`
+    tasks are finished. The workaround for this is a manually remove the orphan
+    configuration file or interface itself and/or reboot the affected hosts, or
+    set the variable ``orphan_interfaces_cleanup`` to ``true``.
+
+fixes:
+  - |
+    Adds the ``orphan_interfaces_cleanup`` variable (by default set to ``false``)
+    which is used to cleanup orphan interfaces in the system when set to
+    ``true``. Also adds the variable ``orphan_interfaces_exclude`` with the default
+    list of the interfaces excluded in cleanup because they have the IP address
+    configured outside the Kayobe configuration, this is Loopback and
+    interfaces used by the Docker and Libvirt services.

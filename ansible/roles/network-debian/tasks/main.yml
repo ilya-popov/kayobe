@@ -41,3 +41,41 @@
     systemd_networkd_cleanup: true
     systemd_networkd_cleanup_patterns:
       - "{{ networkd_prefix }}*"
+
+- block:
+
+    # NOTE(mmalchuk): Because we can cleanup an old management interface we do it
+    # asynchronously. Also we need to restart systemd-networkd service together
+    # with cleanup in one task even if service restart is postponed to the end of
+    # this play.
+    - name: Cleanup oprphan system interfaces asynchronously
+      shell: |
+        systemctl restart systemd-networkd.service || true
+        ip link delete {{ item }} || ip address delete {{ interfaces_system[item] }} dev {{ item }} || true
+      loop: "{{ interfaces_cleanup }}"
+      async: 1
+      poll: 0
+      register: cleanup_interfaces_async
+
+    - name: Check on an async cleanup tasks are finished
+      async_status:
+        jid: "{{ cleanup_result.ansible_job_id }}"
+        mode: "status"
+      loop: "{{ cleanup_interfaces_async.results }}"
+      loop_control:
+        loop_var: "cleanup_result"
+      register: cleanup_job_result
+      until: cleanup_job_result.finished
+      retries: 3
+      delay: 1
+
+    - name: Cleanup async job cache
+      async_status:
+        jid: "{{ cleanup_result.ansible_job_id }}"
+        mode: "cleanup"
+      loop: "{{ cleanup_interfaces_async.results }}"
+      loop_control:
+        loop_var: "cleanup_result"
+
+  become: true
+  when: interfaces_cleanup | default([]) | length > 0

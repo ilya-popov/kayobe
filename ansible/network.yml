@@ -36,6 +36,32 @@
       tags:
         - config-validation
 
+    - block:
+        - name: Collect interfaces from system
+          set_fact:
+            interfaces_system: "{{ (interfaces_system | default({})) | combine({item.device: (item.ipv4.address ~ '/' ~ item.ipv4.netmask) | ipaddr('host')}) }}"
+          loop: "{{ ansible_facts | dict2items | selectattr('value.ipv4.address', 'defined') | map(attribute='value') }}"
+          when: item.device not in orphan_interfaces_exclude
+
+        - name: Collect interfaces from configuration (RedHat)
+          set_fact:
+            interfaces_config: "{{ (interfaces_config | default({})) | combine({item.device: (item.address ~ '/' ~ item.netmask) | ipaddr('host')}) }}"
+          loop: "{{ network_interfaces | map('net_interface_obj') }}"
+          when: item.address != ''
+
+      rescue:
+        - name: Collect interfaces from configuration (Ubuntu)
+          set_fact:
+            interfaces_config: "{{ (interfaces_config | default({})) | combine({item.value[0].Match[0].Name: item.value[1].Network[0].Address}) }}"
+          loop: "{{ network_interfaces | networkd_networks | dict2items }}"
+          when: item.value[1].Network[0].Address is defined
+
+      always:
+        - name: Collect interfaces to cleanup
+          set_fact:
+            interfaces_cleanup: "{{ interfaces_system.keys() | difference(interfaces_config.keys()) }}"
+      when: orphan_interfaces_cleanup | bool
+
     - name: Configure the network
       include_role:
         name: "network-{{ ansible_facts.os_family | lower }}"

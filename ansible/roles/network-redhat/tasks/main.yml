@@ -16,6 +16,14 @@
   when: resolv_is_managed | bool
   become: True
 
+- name: Remove orphan network-scripts configuration if exists
+  become: true
+  file:
+    path: "/etc/sysconfig/network-scripts/ifcfg-{{ item }}"
+    state: absent
+  loop: "{{ interfaces_cleanup }}"
+  when: interfaces_cleanup | default([]) | length > 0
+
 - name: Configure network interfaces (RedHat)
   import_role:
     name: MichaelRigart.interfaces

@@ -92,3 +92,14 @@ network_route_tables: []
 
 # Prefix for systemd-networkd configuration file names.
 networkd_prefix: "50-kayobe-"
+
+###############################################################################
+# Cleanup orphan interfaces.
+
+# By default no need to cleanup orphan interfaces
+orphan_interfaces_cleanup: false
+
+# The default list of the interfaces to exclude from cleanup.
+# This list should contain the interfaces with any IP addresses configured
+# externaly and not reconfigured by Kayobe.
+orphan_interfaces_exclude: ["lo", "docker0", "virbr0"]
