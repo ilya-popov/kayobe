@@ -1,49 +1,72 @@
 ---
 roles:
-  - src: ahuffman.resolv
+  - name: ahuffman.resolv
+    src: git+http://172.17.0.1:3143/ansible-resolv.git
     version: 1.3.1
-  - src: stackhpc.systemd_networkd
+  - name: stackhpc.systemd_networkd
+    src: git+http://172.17.0.1:3143/ansible-role-systemd-networkd.git
     version: v1.0.1
-  - src: giovtorres.tuned
+  - name: giovtorres.tuned
+    src: git+http://172.17.0.1:3143/ansible-role-tuned.git
     version: 1.1.0
-  - src: jriguera.configdrive
+  - name: jriguera.configdrive
+    src: git+http://172.17.0.1:3143/ansible-role-configdrive.git
     # There are no versioned releases of this role.
     version: 29871bf3279ef95fc8f7339b9abd13f869980750
-  - src: MichaelRigart.interfaces
+  - name: MichaelRigart.interfaces
+    src: git+http://172.17.0.1:3143/ansible-role-interfaces.git
     version: v1.13.1
-  - src: mrlesmithjr.chrony
+  - name: mrlesmithjr.chrony
+    src: git+http://172.17.0.1:3143/ansible-chrony.git
     version: v0.1.4
-  - src: mrlesmithjr.manage-lvm
+  - name: mrlesmithjr.manage-lvm
+    src: git+http://172.17.0.1:3143/ansible-manage-lvm.git
     version: v0.2.6
-  - src: mrlesmithjr.mdadm
+  - name: mrlesmithjr.mdadm
+    src: git+http://172.17.0.1:3143/ansible-mdadm.git
     version: v0.1.1
-  - src: singleplatform-eng.users
+  - name: singleplatform-eng.users
+    src: git+http://172.17.0.1:3143/ansible-users.git
     version: v1.2.5
-  - src: stackhpc.dell-powerconnect-switch
+  - name: stackhpc.dell-powerconnect-switch
+    src: git+http://172.17.0.1:3143/ansible-role-dell-powerconnect-switch.git
     version: v1.1.0
-  - src: stackhpc.drac
+  - name: stackhpc.drac
+    src: git+http://172.17.0.1:3143/drac.git
     version: 1.1.6
-  - src: stackhpc.drac-facts
+  - name: stackhpc.drac-facts
+    src: git+http://172.17.0.1:3143/drac-facts.git
     version: 1.0.0
-  - src: stackhpc.grafana-conf
+  - name: stackhpc.grafana-conf
+    src: git+http://172.17.0.1:3143/ansible-role-grafana-conf.git
     version: 1.1.1
-  - src: stackhpc.libvirt-host
+  - name: stackhpc.libvirt-host
+    src: git+http://172.17.0.1:3143/ansible-role-libvirt-host.git
     version: v1.8.3
-  - src: stackhpc.libvirt-vm
+  - name: stackhpc.libvirt-vm
+    src: git+http://172.17.0.1:3143/ansible-role-libvirt-vm.git
     version: v1.14.2
-  - src: stackhpc.luks
+  - name: stackhpc.luks
+    src: git+http://172.17.0.1:3143/ansible-role-luks.git
     version: 0.4.2
-  - src: stackhpc.mellanox-switch
+  - name: stackhpc.mellanox-switch
+    src: git+http://172.17.0.1:3143/ansible-role-mellanox-switch.git
     version: v1.0.0
-  - src: stackhpc.os-images
+  - name: stackhpc.os-images
+    src: git+http://172.17.0.1:3143/ansible-role-os-images.git
     version: v1.10.7
-  - src: stackhpc.os-ironic-state
+  - name: stackhpc.os-ironic-state
+    src: git+http://172.17.0.1:3143/ansible-role-os-ironic-state.git
     version: v1.3.1
-  - src: stackhpc.os-networks
+  - name: stackhpc.os-networks
+    src: git+http://172.17.0.1:3143/ansible-role-os-networks.git
     version: v1.5.3
-  - src: stackhpc.os-openstackclient
+  - name: stackhpc.os-openstackclient
+    src: git+http://172.17.0.1:3143/ansible-role-os-openstackclient.git
     version: v1.4.1
-  - src: stackhpc.os_openstacksdk
+  - name: stackhpc.os_openstacksdk
+    src: git+http://172.17.0.1:3143/ansible-role-os-openstacksdk.git
     version: v1.0.1
-  - src: stackhpc.timezone
+  - name: stackhpc.timezone
+    src: git+http://172.17.0.1:3143/ansible-timezone.git
     version: 1.2.1
