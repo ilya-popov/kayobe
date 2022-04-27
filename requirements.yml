@@ -54,7 +54,7 @@ roles:
     version: v1.0.0
   - name: stackhpc.os-images
     src: git+http://172.17.0.1:3143/ansible-role-os-images.git
-    version: v1.10.7
+    version: vtb/git-from-source
   - name: stackhpc.os-ironic-state
     src: git+http://172.17.0.1:3143/ansible-role-os-ironic-state.git
     version: v1.3.1
