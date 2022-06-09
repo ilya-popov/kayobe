@@ -45,6 +45,14 @@
         - kolla_docker_registry_username not in [none, ""]
         - kolla_docker_registry_password not in [none, ""]
 
+    - name: Check for the presence of custom repos.yml
+      stat:
+        path: "{{ kolla_build_config_path }}/repos.yml"
+        get_md5: false
+        get_checksum: false
+        mime: false
+      register: custom_repos_yml_stat
+
     - name: Ensure Kolla container images are built
       shell:
         cmd: >
@@ -52,6 +60,7 @@
           . {{ kolla_venv }}/bin/activate &&
           kolla-build
           --config-dir {{ kolla_build_config_path }}
+          {% if custom_repos_yml_stat.stat.exists %}--repos-yaml {{ kolla_build_config_path }}/repos.yml{% endif %}
           {% if item.type is defined %}--type {{ item.type }}{% endif %}
           {% if kolla_docker_registry is not none %}--registry {{ kolla_docker_registry }}{% endif %}
           {% if push_images | bool %}--push{% endif %}

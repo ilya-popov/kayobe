@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Since Kolla containers can built with user provided repos.yaml Kayobe uses
+    ``${KAYOBE_CONFIG_PATH}/kolla/repos.yml`` as a source file for this.

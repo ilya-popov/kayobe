@@ -5,6 +5,12 @@
     dest: "{{ kolla_build_config_path }}/kolla-build.conf"
     mode: 0644
 
+- name: Ensure the custom repos.yml file exists
+  merge_yaml:
+    sources: "{{ kolla_build_config_paths | product(['/kolla/repos.yml']) | map('join') | unique | list }}"
+    dest: "{{ kolla_build_config_path }}/repos.yml"
+    mode: 0644
+
 - name: Ensure the Kolla build template overrides file exists
   template:
     src: template-override.j2.j2
