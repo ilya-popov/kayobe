@@ -435,6 +435,41 @@ that is signed by the key.
        components: all
        signed_by: example-key.asc
 
+Development tools
+=================
+*tags:*
+  | ``dev-tools``
+
+Development tools (additional OS packages) can be configured to install on the
+hosts. By default Development tools installed on the all ``seed-hypervisor``,
+``seed``, ``overcloud`` and ``infra-vms`` hosts.
+
+The following variables can be used to set whether to be installed:
+
+* ``dev_tools_packages_default``: The list of packages installed by default.
+  (default is: ``bash-completion``, ``tcpdump`` and ``vim``)
+* ``dev_tools_packages_extra``: The list of additional packages installed
+  alongside with default packages. (default is an empty list)
+
+In the following example, the to default packages installed on the all hosts
+added ``zsh`` and ``bridge-utils`` will be installed on the all ``overcloud``
+hosts alongside with the new default packages:
+
+.. code-block:: yaml
+   :caption: ``dev-tools.yml``
+
+   dev_tools_packages_default:
+     - bash-completion
+     - tcpdump
+     - vim
+     - zsh
+
+.. code-block:: yaml
+   :caption: ``inventory/group_vars/overcloud/dev-tools``
+
+   dev_tools_packages_extra:
+     - bridge-utils
+
 SELinux
 =======
 *tags:*
