@@ -258,6 +258,10 @@ kolla_globals_paths_extra: []
 # kolla_globals_paths_default and kolla_globals_paths_extra.
 kolla_globals_paths: "{{ kolla_globals_paths_default + kolla_globals_paths_extra }}"
 
+# Dictionary containing default custom passwords to add or override in the
+# Kolla passwords file.
+kolla_ansible_default_custom_passwords: {}
+
 # Dictionary containing custom passwords to add or override in the Kolla
 # passwords file.
 kolla_ansible_custom_passwords: {}

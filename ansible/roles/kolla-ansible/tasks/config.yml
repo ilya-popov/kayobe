@@ -88,7 +88,8 @@
     dest: "{{ kolla_ansible_passwords_path }}"
     mode: 0640
     sample: "{{ kolla_ansible_install_dir }}/etc_examples/kolla/passwords.yml"
-    overrides: "{{ kolla_ansible_custom_passwords }}"
+    overrides: "{{ kolla_ansible_default_custom_passwords |
+                   combine(kolla_ansible_custom_passwords) }}"
     vault_password: "{{ kolla_ansible_vault_password }}"
     virtualenv: "{{ kolla_ansible_venv or omit }}"
 

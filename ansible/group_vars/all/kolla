@@ -606,7 +606,7 @@ kolla_ansible_default_custom_passwords:
 
 # Dictionary containing custom passwords to add or override in the Kolla
 # passwords file.
-kolla_ansible_custom_passwords: "{{ kolla_ansible_default_custom_passwords }}"
+kolla_ansible_custom_passwords: {}
 
 ###############################################################################
 # OpenStack API addresses.

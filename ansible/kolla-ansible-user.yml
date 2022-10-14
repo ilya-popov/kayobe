@@ -34,7 +34,7 @@
                   - sudo
                 append: True
                 ssh_key:
-                  - "{{ kolla_ansible_custom_passwords.kolla_ssh_key.public_key }}"
+                  - "{{ kolla_ansible_default_custom_passwords.kolla_ssh_key.public_key }}"
 
         - name: Ensure the Kolla Ansible user has passwordless sudo
           copy:

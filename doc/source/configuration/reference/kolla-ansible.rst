@@ -595,17 +595,20 @@ variable, if present. The file is generated to
 ``$KAYOBE_CONFIG_PATH/kolla/passwords.yml``, and should be stored along with
 other Kayobe configuration files. This file should not be manually modified.
 
-``kolla_ansible_custom_passwords``
-    Dictionary containing custom passwords to add or override in the Kolla
-    passwords file. Default is ``{{ kolla_ansible_default_custom_passwords
-    }}``, which contains SSH keys for use by Kolla Ansible and Bifrost.
-
 Configuring Custom Passwords
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In order to write additional passwords to ``passwords.yml``, set the kayobe
-variable ``kolla_ansible_custom_passwords`` in
-``$KAYOBE_CONFIG_PATH/kolla.yml``.
+The following variables used to configure custom passwords:
+
+* ``kolla_ansible_default_custom_passwords``: Dictionary containing default
+  custom passwords, required by Kolla Ansible. Contains SSH keys authorized by
+  kolla user on Kolla hosts, SSH keys authorized in hosts deployed by Bifrost,
+  Docker Registry password and compute libVirt custom passwords.
+* ``kolla_ansible_custom_passwords``: Dictionary containing custom passwords to
+  add or override in the Kolla passwords file. Default is an empty dictionary.
+
+In this example we add own ``my_custom_password`` and override
+``keystone_admin_password``:
 
 .. code-block:: yaml
    :caption: ``$KAYOBE_CONFIG_PATH/kolla.yml``
@@ -613,9 +616,9 @@ variable ``kolla_ansible_custom_passwords`` in
    ---
    # Dictionary containing custom passwords to add or override in the Kolla
    # passwords file.
-   kolla_ansible_custom_passwords: >
-     {{ kolla_ansible_default_custom_passwords |
-        combine({'my_custom_password': 'correcthorsebatterystaple'}) }}
+   kolla_ansible_custom_passwords:
+     my_custom_password: 'correcthorsebatterystaple'
+     keystone_admin_password: 'superduperstrongpassword'
 
 Control Plane Services
 ======================
