@@ -33,6 +33,7 @@
     repo: "{{ kolla_source_url }}"
     dest: "{{ kolla_source_path }}"
     version: "{{ kolla_source_version }}"
+    force: true
   when: kolla_ctl_install_type == 'source'
 
 - name: Ensure virtualenv parent directory exists
